@@ -281,5 +281,51 @@ export const cfOperations: SdkTestOperation[] = [
       return !!(ctResult && (ctResult.status === 'created' || ctResult.status === 'exists'));
     },
   },
+  {
+    id: 'cf-update-other-field',
+    name: 'Update Other Field',
+    description: 'Get another field (content) and update it using Custom Field',
+    category: 'cf' as TestCategory,
+    testId: 'sdk-cf-update-other-field',
+    resultTestId: 'sdk-cf-update-other-field-result',
+    execute: async (sdk) => {
+      const entry = sdk?.location?.CustomField?.entry;
+      if (!entry) {
+        throw new Error('Entry object not available at CustomField');
+      }
+      
+      // Get the 'content' field
+      const contentField = entry.getField('content');
+      if (!contentField) {
+        throw new Error('Field "content" not found in entry');
+      }
+      
+      // Get current data before update
+      const oldData = await contentField.getData();
+      
+      // Update the field
+      const updateValue = 'Updated using custom field';
+      await contentField.setData(updateValue);
+      
+      // Verify the update by getting the data back
+      const newData = await contentField.getData();
+      
+      // Check if update was successful by comparing values
+      const isUpdated = typeof newData === 'string' 
+        ? newData === updateValue 
+        : JSON.stringify(newData) === JSON.stringify(updateValue);
+      
+      return {
+        status: 'success',
+        fieldUid: 'content',
+        oldData: oldData,
+        newData: newData,
+        updateValue: updateValue,
+        isUpdated: isUpdated
+      };
+    },
+    formatResult: (result: unknown) => JSON.stringify(result, null, 2),
+    validateResult: (result: any) => result?.status === 'success' && result?.isUpdated === true,
+  },
   
 ];
