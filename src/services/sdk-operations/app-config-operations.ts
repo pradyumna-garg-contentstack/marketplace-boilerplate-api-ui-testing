@@ -92,4 +92,33 @@ export const appConfigOperations: SdkTestOperation[] = [
       return typedResult?.status === 'success' && typedResult?.hasStack === true;
     }
   },
+  {
+    id: 'sdk-appcfg-api',
+    name: 'Call sdk.api',
+    description: 'Fetch content types using sdk.api()',
+    testId: 'sdk-appcfg-api',
+    resultTestId: 'sdk-appcfg-api-result',
+    execute: async (sdk) => {
+      if (!sdk?.endpoints?.CMA) {
+        throw new Error('CMA endpoint not available');
+      }
+      const res = await sdk.api(`${sdk.endpoints.CMA}/v3/content_types?limit=1`, {
+        method: 'GET',
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error_message || 'Failed to fetch content types');
+      }
+      const json = await res.json() as Record<'content_types', unknown[]>;
+      return {
+        status: 'success',
+        count: json?.content_types?.length || 0,
+      };
+    },
+    formatResult: (result) => JSON.stringify(result, null, 2),
+    validateResult: (result) => {
+      const typedResult = result as { status?: string; count?: number };
+      return typedResult?.status === 'success' && typeof typedResult?.count === 'number';
+    },
+  },
 ];
