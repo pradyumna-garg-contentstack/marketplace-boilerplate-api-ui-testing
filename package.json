@@ -6,7 +6,7 @@
     "dist"
   ],
   "dependencies": {
-    "@contentstack/app-sdk": "github:contentstack/app-sdk#main",
+    "@contentstack/app-sdk": "github:contentstack/app-sdk#staging",
     "@contentstack/management": "^1.18.2",
     "@contentstack/venus-components": "3.0.0",
     "@types/node": "^18.19.4",
