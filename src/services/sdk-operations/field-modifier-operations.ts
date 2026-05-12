@@ -1,7 +1,7 @@
 import { SdkTestOperation } from "../../types/sdk-testing.types";
 
 // Store test data between operations
-const TEST_FIELD_VALUE = 'E2E Test Field Value';
+const TEST_FIELD_VALUE = 'Screen Content';
 const TEST_TAGS = ['e2e-tag-1', 'e2e-tag-2'];
 
 export const fieldModifierOperations: SdkTestOperation[] = [
