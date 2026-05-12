@@ -1,0 +1,472 @@
+{
+  "id": "group_field_complex",
+  "name": "Group Field — Complex (Mixed Child Types)",
+  "description": "Tests setData on groups containing mixed field types: text (min_size), number, boolean, file. Also tests a repeatable group with email format constraint.",
+  "contentType": {
+    "uid": "sdk_tc_group_complex",
+    "title": "SDK TC - Group Field Complex",
+    "description": "Module for SDK complex group field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "profile",
+        "data_type": "group",
+        "display_name": "Profile",
+        "mandatory": false,
+        "unique": false,
+        "multiple": false,
+        "schema": [
+          {
+            "uid": "name",
+            "data_type": "text",
+            "display_name": "Name",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false,
+            "min": 3
+          },
+          {
+            "uid": "age",
+            "data_type": "number",
+            "display_name": "Age",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          },
+          {
+            "uid": "active",
+            "data_type": "boolean",
+            "display_name": "Active",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          },
+          {
+            "uid": "avatar",
+            "data_type": "file",
+            "display_name": "Avatar",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      },
+      {
+        "uid": "contacts",
+        "data_type": "group",
+        "display_name": "Contacts",
+        "mandatory": false,
+        "unique": false,
+        "multiple": true,
+        "schema": [
+          {
+            "uid": "email",
+            "data_type": "text",
+            "display_name": "Email",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "format": "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$",
+            "error_messages": {
+              "format": "Please enter a valid email address"
+            },
+            "multiple": false
+          },
+          {
+            "uid": "phone",
+            "data_type": "text",
+            "display_name": "Phone",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Group Field Complex Entry",
+    "profile": {
+      "name": "Jane",
+      "age": 30,
+      "active": true,
+      "avatar": "bltaaa111"
+    },
+    "contacts": [
+      {
+        "email": "jane@example.com",
+        "phone": "555-1234"
+      }
+    ]
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "profile valid → resolves, no onError",
+      "description": "Valid profile with all correct types.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": {
+          "name": "Jane",
+          "age": 30,
+          "active": true,
+          "avatar": "bltaaa111"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "profile null → resolves, no onError",
+      "description": "null clears the group.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "profile name is number → throws ValidationError (INVALID_TYPE profile.name)",
+      "description": "Number for text name field fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": {
+          "name": 123,
+          "age": 30
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "profile.name",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "profile age is string → throws ValidationError (INVALID_TYPE profile.age)",
+      "description": "String for number age field fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": {
+          "name": "Jane",
+          "age": "30"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "profile.age",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "profile active is string → throws ValidationError (INVALID_TYPE profile.active)",
+      "description": "String 'yes' for boolean active field fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": {
+          "name": "Jane",
+          "active": "yes"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "profile.active",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "profile avatar is full asset object → throws ValidationError (INVALID_TYPE profile.avatar)",
+      "description": "Full asset object for file field fails Zod — expects uid string.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": {
+          "name": "Jane",
+          "avatar": {
+            "uid": "bltaaa111",
+            "url": "https://images.cs.io/v3/assets/blt..."
+          }
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "profile.avatar",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-009",
+      "name": "profile array not object → throws ValidationError (INVALID_TYPE profile)",
+      "description": "Array fails Zod looseObject schema for group.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "profile",
+        "subscribeFieldOnErrorUid": "profile",
+        "data": [
+          {
+            "name": "Jane"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "profile",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-010",
+      "name": "contacts valid array → resolves, no onError",
+      "description": "Valid contacts array with proper email.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "contacts",
+        "subscribeFieldOnErrorUid": "contacts",
+        "data": [
+          {
+            "email": "user@example.com",
+            "phone": "555-1234"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-011",
+      "name": "contacts email is number → throws ValidationError (INVALID_TYPE contacts.0.email)",
+      "description": "Number for text email in row 0 fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "contacts",
+        "subscribeFieldOnErrorUid": "contacts",
+        "data": [
+          {
+            "email": 42,
+            "phone": "555"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "contacts.0.email",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-012",
+      "name": "contacts object not array → throws ValidationError (INVALID_TYPE contacts)",
+      "description": "Plain object where repeatable group array expected fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "contacts",
+        "subscribeFieldOnErrorUid": "contacts",
+        "data": {
+          "email": "x@x.com",
+          "phone": "555"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "contacts",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ]
+}
