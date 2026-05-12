@@ -1,0 +1,390 @@
+{
+  "id": "link_field",
+  "name": "Link Field — Single and Multiple",
+  "description": "Tests setData on link fields. Zod requires {href: string, title: string} — both keys required. Missing either key or wrong types throws INVALID_TYPE.",
+  "contentType": {
+    "uid": "sdk_tc_link",
+    "title": "SDK TC - Link Field",
+    "description": "Module for SDK link field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "cta_button",
+        "data_type": "link",
+        "display_name": "CTA Button",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "nav_links",
+        "data_type": "link",
+        "display_name": "Navigation Links",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": true
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Link Field Entry",
+    "cta_button": {
+      "href": "/about",
+      "title": "About Us"
+    },
+    "nav_links": [
+      {
+        "href": "/home",
+        "title": "Home"
+      }
+    ]
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "cta_button valid → resolves, no onError",
+      "description": "Valid {href, title} object. Passes Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": {
+          "href": "/about",
+          "title": "About Us"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "cta_button null → resolves, no onError",
+      "description": "null clears the link field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "cta_button missing href → throws ValidationError (INVALID_TYPE)",
+      "description": "Object without 'href' key fails Zod strict link schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": {
+          "title": "About Us"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "cta_button.href",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "cta_button missing title → throws ValidationError (INVALID_TYPE)",
+      "description": "Object without 'title' key fails Zod strict link schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": {
+          "href": "/about"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "cta_button.title",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "cta_button href is number → throws ValidationError (INVALID_TYPE)",
+      "description": "Number for href fails Zod string schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": {
+          "href": 42,
+          "title": "About"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "cta_button.href",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "cta_button plain string → throws ValidationError (INVALID_TYPE)",
+      "description": "String fails Zod object schema for link.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": "/about"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "cta_button",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "cta_button empty object → throws ValidationError (INVALID_TYPE)",
+      "description": "Empty object missing both href and title fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "cta_button",
+        "subscribeFieldOnErrorUid": "cta_button",
+        "data": {}
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "cta_button.href",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              },
+              {
+                "fieldUid": "cta_button.title",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "nav_links valid array → resolves, no onError",
+      "description": "Valid array of link objects.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "nav_links",
+        "subscribeFieldOnErrorUid": "nav_links",
+        "data": [
+          {
+            "href": "/a",
+            "title": "A"
+          },
+          {
+            "href": "/b",
+            "title": "B"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-009",
+      "name": "nav_links empty array → resolves, no onError",
+      "description": "Empty array is valid.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "nav_links",
+        "subscribeFieldOnErrorUid": "nav_links",
+        "data": []
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-010",
+      "name": "nav_links item missing title → throws ValidationError (INVALID_TYPE)",
+      "description": "Link item without title fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "nav_links",
+        "subscribeFieldOnErrorUid": "nav_links",
+        "data": [
+          {
+            "href": "/a"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "nav_links.0.title",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ]
+}

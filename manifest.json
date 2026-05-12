@@ -19,6 +19,14 @@
             "signed": false,
             "enabled": true,
             "data_type": "json"
+          },
+          {
+            "multiple": false,
+            "name": "Set Data",
+            "path": "/#/sdk-data-errors",
+            "signed": false,
+            "enabled": true,
+            "data_type": "json"
           }
         ]
       },
@@ -52,6 +60,12 @@
             "path": "/#/entry-sidebar",
             "signed": false,
             "enabled": true
+          },
+          {
+            "name": "Set Data",
+            "path": "/#/sdk-data-errors",
+            "signed": false,
+            "enabled": true
           }
         ]
       },
@@ -72,7 +86,18 @@
             "path": "/#/field-modifier",
             "signed": false,
             "enabled": true,
-            "allowed_types": ["$all"]
+            "allowed_types": [
+              "$all"
+            ]
+          },
+          {
+            "name": "Set Data",
+            "path": "/#/sdk-data-errors",
+            "signed": false,
+            "enabled": true,
+            "allowed_types": [
+              "$all"
+            ]
           }
         ]
       },

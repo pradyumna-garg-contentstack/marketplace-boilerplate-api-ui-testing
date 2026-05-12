@@ -1,0 +1,397 @@
+{
+  "id": "json_rte_field",
+  "name": "JSON RTE Field (allow_json_rte: true)",
+  "description": "Tests setData on JSON RTE fields. Root must be {type:'doc',...}. CRITICAL: Unlike all other fields, JSON RTE is NOT nullable — null throws INVALID_TYPE.",
+  "contentType": {
+    "uid": "sdk_tc_json_rte",
+    "title": "SDK TC - JSON RTE Field",
+    "description": "Module for SDK JSON RTE field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "article_body",
+        "data_type": "json",
+        "display_name": "Article Body",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "allow_json_rte": true
+        },
+        "multiple": false
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC JSON RTE Field Entry",
+    "article_body": {
+      "type": "doc",
+      "children": [
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "Hello World"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "empty children array → throws ValidationError (TOO_SMALL)",
+      "description": "Empty children array fails Zod. Throws ValidationError with TOO_SMALL.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "type": "doc",
+          "children": []
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "article_body.children",
+                "reasons": [
+                  {
+                    "reason": "TOO_SMALL"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "article_body valid doc with paragraph → resolves, no onError",
+      "description": "Valid JSON RTE with paragraph node.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "type": "doc",
+          "children": [
+            {
+              "type": "p",
+              "children": [
+                {
+                  "text": "Hello"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "article_body deeply nested valid doc → resolves, no onError",
+      "description": "Nested list structure passes Zod looseObject.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "type": "doc",
+          "children": [
+            {
+              "type": "ul",
+              "children": [
+                {
+                  "type": "li",
+                  "children": [
+                    {
+                      "text": "item"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "article_body extra root fields (looseObject) → resolves, no onError",
+      "description": "Zod looseObject ignores extra keys like version and extraKey.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "type": "doc",
+          "version": 3,
+          "children": [
+            {
+              "text": "Hello"
+            }
+          ],
+          "extraKey": "ok"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "article_body null → throws ValidationError (NOT nullable — INVALID_TYPE)",
+      "description": "JSON RTE is the only field type NOT wrapped in .nullable(). null throws INVALID_TYPE.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "article_body",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "article_body wrong root type → throws ValidationError",
+      "description": "type:'paragraph' fails Zod z.literal('doc') requirement.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "type": "paragraph",
+          "children": [
+            {
+              "text": "Hello"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "article_body.type",
+                "reasons": [
+                  {
+                    "reason": "INVALID_VALUE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "article_body missing type key → throws ValidationError (INVALID_TYPE)",
+      "description": "Object without required 'type' key fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "children": [
+            {
+              "text": "Hello"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "article_body.type",
+                "reasons": [
+                  {
+                    "reason": "INVALID_VALUE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "article_body string HTML → throws ValidationError (INVALID_TYPE)",
+      "description": "HTML string fails Zod object schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": "<p>Hello</p>"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "article_body",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-009",
+      "name": "article_body plain object no type key → throws ValidationError (INVALID_TYPE)",
+      "description": "Object with content key but no type fails Zod literal('doc') check.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "article_body",
+        "subscribeFieldOnErrorUid": "article_body",
+        "data": {
+          "content": "text"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "article_body.type",
+                "reasons": [
+                  {
+                    "reason": "INVALID_VALUE"
+                  }
+                ]
+              },
+              {
+                "fieldUid": "article_body.children",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ]
+}

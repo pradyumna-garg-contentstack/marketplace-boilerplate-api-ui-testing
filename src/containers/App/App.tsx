@@ -26,6 +26,7 @@ const PageNotFound = React.lazy(() => import("../404/404"));
 const DefaultPage = React.lazy(() => import("../index"));
 const AssetSidebarRail = React.lazy(() => import("../AssetSidebarRail/AssetSidebarRail"));
 const GlobalFullPage = React.lazy(() => import("../GlobalFullPage/GlobalFullPage"));
+const SdkDataErrors  = React.lazy(() => import("../SdkDataErrors/SdkDataErrors"));
 
 function App() {
   return (
@@ -124,6 +125,14 @@ function App() {
             element={
               <Suspense>
                 <GlobalFullPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/sdk-data-errors"
+            element={
+              <Suspense>
+                <SdkDataErrors />
               </Suspense>
             }
           />

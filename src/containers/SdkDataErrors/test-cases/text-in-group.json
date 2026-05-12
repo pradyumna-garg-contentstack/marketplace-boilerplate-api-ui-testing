@@ -1,0 +1,310 @@
+{
+  "id": "text_in_group",
+  "name": "Text Field Inside Group (Single)",
+  "description": "Tests setData on a single group field containing a text field with min_size:5 and max_size:50. Also tests direct setData on the child field.",
+  "contentType": {
+    "uid": "sdk_tc_text_group",
+    "title": "SDK TC - Text In Group",
+    "description": "Module for SDK text-in-group field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "address",
+        "data_type": "group",
+        "display_name": "Address",
+        "mandatory": false,
+        "unique": false,
+        "multiple": false,
+        "schema": [
+          {
+            "uid": "street",
+            "data_type": "text",
+            "display_name": "Street",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {
+              "description": "5 to 50 characters"
+            },
+            "multiple": false,
+            "min": 5,
+            "max": 50
+          }
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Text In Group Entry",
+    "address": {
+      "street": "123 Main Street"
+    }
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "address valid group → resolves, no onError",
+      "description": "Valid street within 5-50 chars. Passes Zod and CMS.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address",
+        "subscribeFieldOnErrorUid": "address",
+        "data": {
+          "street": "123 Main St"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "address null → resolves, no onError",
+      "description": "null clears the group field. Zod nullable allows it.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address",
+        "subscribeFieldOnErrorUid": "address",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "address.street is number → throws ValidationError (INVALID_TYPE)",
+      "description": "Number for text child field fails Zod. setData throws with dotted fieldUid.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address",
+        "subscribeFieldOnErrorUid": "address",
+        "data": {
+          "street": 123
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "address.street",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "address array instead of object → throws ValidationError (INVALID_TYPE)",
+      "description": "Array fails Zod looseObject schema for the group.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address",
+        "subscribeFieldOnErrorUid": "address",
+        "data": [
+          {
+            "street": "123 Main St"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "address",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "address string instead of object → throws ValidationError (INVALID_TYPE)",
+      "description": "Plain string fails Zod looseObject schema for the group.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address",
+        "subscribeFieldOnErrorUid": "address",
+        "data": "123 Main St"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "address",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "uid isolation: subscribe address, Zod error on address.street → address listener silent",
+      "description": "Zod throws for address.street type mismatch. setData throws — neither field.onError nor entry.onError fire (throw path bypasses form).",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address",
+        "subscribeFieldOnErrorUid": "address",
+        "data": {
+          "street": 123
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "address.street",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-009",
+      "name": "direct address.street setData valid → resolves, no onError",
+      "description": "Direct setData on child field with valid string. Passes all layers.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address.street",
+        "subscribeFieldOnErrorUid": "address.street",
+        "data": "456 Oak Avenue"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-011",
+      "name": "direct address.street setData type mismatch → throws ValidationError",
+      "description": "Direct setData on child field with number 123. Fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "address.street",
+        "subscribeFieldOnErrorUid": "address.street",
+        "data": 123
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "street",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,394 @@
+{
+  "id": "number_field",
+  "name": "Number Field — Single and Multiple",
+  "description": "Tests setData on a number field (single and multiple). String/boolean/object fail Zod INVALID_TYPE. Number values always resolve (no CMS numeric range constraints in this module).",
+  "contentType": {
+    "uid": "sdk_tc_number",
+    "title": "SDK TC - Number Field",
+    "description": "Module for SDK number field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "price",
+        "data_type": "number",
+        "display_name": "Price",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "related_skus",
+        "data_type": "number",
+        "display_name": "Related SKUs",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": true
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Number Field Entry",
+    "price": 29.99,
+    "related_skus": [
+      101,
+      102
+    ]
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "price valid → resolves, no onError",
+      "description": "Float number. Passes Zod number schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": 29.99
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "price zero → resolves, no onError",
+      "description": "Zero is a valid number.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": 0
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "price negative → resolves, no onError",
+      "description": "Negative number is valid for Zod and CMS (no min constraint).",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": -5
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "price null → resolves, no onError",
+      "description": "null clears the field. Zod nullable allows it.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "price string → throws ValidationError (INVALID_TYPE)",
+      "description": "String '29.99' fails Zod number schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": "29.99"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "price",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "price boolean → throws ValidationError (INVALID_TYPE)",
+      "description": "Boolean fails Zod number schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": true
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "price",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "price object → throws ValidationError (INVALID_TYPE)",
+      "description": "Object fails Zod number schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "price",
+        "subscribeFieldOnErrorUid": "price",
+        "data": {
+          "value": 29
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "price",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "related_skus valid array → resolves, no onError",
+      "description": "Valid number array.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "related_skus",
+        "subscribeFieldOnErrorUid": "related_skus",
+        "data": [
+          101,
+          102,
+          103
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-009",
+      "name": "related_skus empty array → resolves, no onError",
+      "description": "Empty array is valid for multiple number field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "related_skus",
+        "subscribeFieldOnErrorUid": "related_skus",
+        "data": []
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-010",
+      "name": "related_skus null → resolves, no onError",
+      "description": "null clears the multiple number field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "related_skus",
+        "subscribeFieldOnErrorUid": "related_skus",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-011",
+      "name": "related_skus single number not array → throws ValidationError (INVALID_TYPE)",
+      "description": "Single number where array is expected fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "related_skus",
+        "subscribeFieldOnErrorUid": "related_skus",
+        "data": 101
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "related_skus",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-012",
+      "name": "related_skus array with string → throws ValidationError (INVALID_TYPE)",
+      "description": "String item in number array fails Zod item schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "related_skus",
+        "subscribeFieldOnErrorUid": "related_skus",
+        "data": [
+          101,
+          "102"
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "related_skus.1",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ]
+}
