@@ -165,7 +165,7 @@
                 "fieldUid": "author_ref",
                 "reasons": [
                   {
-                    "message": "Reference must have a _content_type_uid and uid"
+                    "message": "Reference object must contain valid _content_type_uid and uid properties"
                   }
                 ]
               }
@@ -202,7 +202,7 @@
                 "fieldUid": "author_ref",
                 "reasons": [
                   {
-                    "message": "Reference must have a _content_type_uid and uid"
+                    "message": "Reference object must contain valid _content_type_uid and uid properties"
                   }
                 ]
               }
@@ -359,7 +359,7 @@
                 "fieldUid": "related_posts",
                 "reasons": [
                   {
-                    "message": "Reference must have a _content_type_uid and uid"
+                    "message": "Reference object must contain valid _content_type_uid and uid properties"
                   }
                 ]
               }
