@@ -6,7 +6,11 @@
     "uid": "sdk_tc_text_rep_group",
     "title": "SDK TC - Text In Repeatable Group",
     "description": "Module for SDK text-in-repeatable-group validation tests",
-    "options": { "is_page": false, "singleton": false, "title": "title" },
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
     "schema": [
       {
         "uid": "title",
@@ -14,7 +18,9 @@
         "display_name": "Title",
         "mandatory": true,
         "unique": false,
-        "field_metadata": { "_default": true },
+        "field_metadata": {
+          "_default": true
+        },
         "multiple": false
       },
       {
@@ -49,7 +55,12 @@
   },
   "baseline": {
     "title": "SDK TC Text In Repeatable Group Entry",
-    "faq": [{ "question": "What is this?", "answer": "A test entry." }]
+    "faq": [
+      {
+        "question": "What is this?",
+        "answer": "A test entry."
+      }
+    ]
   },
   "testCases": [
     {
@@ -60,12 +71,23 @@
         "type": "field-setdata",
         "targetFieldUid": "faq",
         "subscribeFieldOnErrorUid": "faq",
-        "data": [{ "question": "What?", "answer": "This." }]
+        "data": [
+          {
+            "question": "What?",
+            "answer": "This."
+          }
+        ]
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -79,9 +101,15 @@
         "data": []
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -95,9 +123,15 @@
         "data": null
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -108,18 +142,36 @@
         "type": "field-setdata",
         "targetFieldUid": "faq",
         "subscribeFieldOnErrorUid": "faq",
-        "data": [{ "question": 42, "answer": "x" }]
+        "data": [
+          {
+            "question": 42,
+            "answer": "x"
+          }
+        ]
       },
       "expected": {
         "setData": {
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "faq.0.question", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "faq.0.question",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -130,18 +182,40 @@
         "type": "field-setdata",
         "targetFieldUid": "faq",
         "subscribeFieldOnErrorUid": "faq",
-        "data": [{ "question": "ok", "answer": "fine" }, { "question": 99, "answer": "also" }]
+        "data": [
+          {
+            "question": "ok",
+            "answer": "fine"
+          },
+          {
+            "question": 99,
+            "answer": "also"
+          }
+        ]
       },
       "expected": {
         "setData": {
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "faq.1.question", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "faq.1.question",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -152,18 +226,33 @@
         "type": "field-setdata",
         "targetFieldUid": "faq",
         "subscribeFieldOnErrorUid": "faq",
-        "data": { "question": "What?" }
+        "data": {
+          "question": "What?"
+        }
       },
       "expected": {
         "setData": {
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "faq", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "faq",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -181,11 +270,24 @@
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "faq", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "faq",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -194,13 +296,26 @@
       "description": "entry.setData with valid faq array. Passes all layers.",
       "operation": {
         "type": "entry-setdata",
-        "data": { "faq": [{ "question": "Why?", "answer": "Because." }] },
+        "data": {
+          "faq": [
+            {
+              "question": "Why?",
+              "answer": "Because."
+            }
+          ]
+        },
         "subscribeFieldOnErrorUid": null
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -209,7 +324,13 @@
       "description": "entry.setData with number question in row 0. Fails Zod.",
       "operation": {
         "type": "entry-setdata",
-        "data": { "faq": [{ "question": 42 }] },
+        "data": {
+          "faq": [
+            {
+              "question": 42
+            }
+          ]
+        },
         "subscribeFieldOnErrorUid": null
       },
       "expected": {
@@ -217,12 +338,26 @@
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "faq.0.question", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "faq.0.question",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     }
-  ]
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
 }
