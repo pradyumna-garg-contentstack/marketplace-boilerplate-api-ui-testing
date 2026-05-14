@@ -89,7 +89,8 @@
     "sections": [
       {
         "hero": {
-          "heading": "Welcome here!"
+          "heading": "Welcome here!",
+          "subheading": null
         }
       }
     ]
@@ -518,5 +519,6 @@
         }
       }
     }
-  ]
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
 }
