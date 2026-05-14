@@ -1,10 +1,10 @@
 {
-  "id": "all_fields_complex",
-  "name": "All Field Types — Complex Content Type",
-  "description": "One content type containing every supported Contentstack field type. Tests happy path (all valid), type mismatch per field, CMS constraint violations, null clearing, and entry.setData with multiple simultaneous errors.",
+  "id": "all_fields_complex_custom_field",
+  "name": "All Field Types — Complex (Custom Field)",
+  "description": "Clone of all-fields complex for Set Data tests opened in a Custom Field (JSON extension). entry.setData cases omitted — use entry-sidebar module for those.",
   "contentType": {
-    "uid": "sdk_tc_all_fields",
-    "title": "SDK TC E - All Fields Complex",
+    "uid": "sdk_tc_all_fields_cf",
+    "title": "SDK TC CF - All Fields Complex",
     "description": "Content type containing all supported field types for comprehensive setData validation tests",
     "options": {
       "is_page": false,
@@ -20,6 +20,18 @@
         "unique": false,
         "field_metadata": {
           "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "extension_field",
+        "data_type": "json",
+        "display_name": "Extension Field",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "extension": true,
+          "allow_json_rte": false
         },
         "multiple": false
       },
@@ -131,7 +143,7 @@
           "ref_multiple": false
         },
         "reference_to": [
-          "sdk_tc_all_fields"
+          "sdk_tc_all_fields_cf"
         ],
         "multiple": false
       },
@@ -333,18 +345,6 @@
           "markdown": true
         },
         "multiple": false
-      },
-      {
-        "uid": "extension_field",
-        "data_type": "json",
-        "display_name": "Extension Field",
-        "mandatory": false,
-        "unique": false,
-        "field_metadata": {
-          "extension": true,
-          "allow_json_rte": false
-        },
-        "multiple": false
       }
     ]
   },
@@ -416,91 +416,6 @@
     }
   },
   "testCases": [
-    {
-      "id": "TC-A-001",
-      "name": "Group A: entry.setData full valid payload → resolves, no onError",
-      "description": "Happy path: entry.setData with complete valid data for all field types. Every field passes Zod and CMS validation.",
-      "operation": {
-        "type": "entry-setdata",
-        "data": {
-          "text_single": "Hello World",
-          "text_multiple": [
-            "react",
-            "node"
-          ],
-          "number_single": 42,
-          "number_multiple": [
-            1,
-            2,
-            3
-          ],
-          "boolean_field": true,
-          "date_single": "2025-06-15T00:00:00.000Z",
-          "date_with_range": "2025-06-15T00:00:00.000Z",
-          "file_single": "bltaaa111",
-          "file_multiple": [
-            "bltbbb222",
-            "bltccc333"
-          ],
-          "link_field": {
-            "href": "/home",
-            "title": "Home"
-          },
-          "select_single": "opt_a",
-          "select_multiple": [
-            "tag_1",
-            "tag_2"
-          ],
-          "group_single": {
-            "sub_text": "hello",
-            "sub_number": 10
-          },
-          "group_repeatable": [
-            {
-              "item_name": "Item One"
-            }
-          ],
-          "modular_blocks_field": [
-            {
-              "text_section": {
-                "content": "Hello world content"
-              }
-            }
-          ],
-          "taxonomies": [
-            {
-              "taxonomy_uid": "taxonomy_testing1",
-              "term_uid": "term_test1"
-            }
-          ],
-          "json_plain": "{\"key\":\"value\"}",
-          "json_rte": {
-            "type": "doc",
-            "children": [
-              {
-                "text": "Hello"
-              }
-            ]
-          },
-          "markdown_field": "# Hello",
-          "extension_field": {
-            "color": "#0070f3"
-          }
-        },
-        "subscribeFieldOnErrorUid": null
-      },
-      "expected": {
-        "setData": {
-          "outcome": "resolved"
-        },
-        "fieldOnError": {
-          "fired": false
-        },
-        "entryOnError": {
-          "fired": false
-        }
-      }
-    },
     {
       "id": "TC-B-001",
       "name": "Group B: text_single type mismatch (number) → throws INVALID_TYPE",
@@ -1094,61 +1009,8 @@
           "fired": false
         }
       }
-    },
-    {
-      "id": "TC-E-001",
-      "name": "Group E: entry.setData multiple type mismatches → throws with 3 details",
-      "description": "entry.setData with 3 wrong types simultaneously. Zod collects all errors — details has 3 entries.",
-      "operation": {
-        "type": "entry-setdata",
-        "data": {
-          "text_single": 123,
-          "number_single": "twenty",
-          "boolean_field": "yes"
-        },
-        "subscribeFieldOnErrorUid": null
-      },
-      "expected": {
-        "setData": {
-          "outcome": "threw-ValidationError",
-          "error": {
-            "code": "VALIDATION_ERROR",
-            "details": [
-              {
-                "fieldUid": "text_single",
-                "reasons": [
-                  {
-                    "reason": "INVALID_TYPE"
-                  }
-                ]
-              },
-              {
-                "fieldUid": "number_single",
-                "reasons": [
-                  {
-                    "reason": "INVALID_TYPE"
-                  }
-                ]
-              },
-              {
-                "fieldUid": "boolean_field",
-                "reasons": [
-                  {
-                    "reason": "INVALID_TYPE"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "fieldOnError": {
-          "fired": false
-        },
-        "entryOnError": {
-          "fired": false
-        }
-      }
     }
   ],
-  "sdkDeUiLocation": "entry-sidebar"
+  "sdkDeUiLocation": "custom-field",
+  "sdkDeCustomFieldUid": "extension_field"
 }

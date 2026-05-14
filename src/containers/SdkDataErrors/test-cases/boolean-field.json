@@ -6,7 +6,11 @@
     "uid": "sdk_tc_boolean",
     "title": "SDK TC - Boolean Field",
     "description": "Module for SDK boolean field validation tests",
-    "options": { "is_page": false, "singleton": false, "title": "title" },
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
     "schema": [
       {
         "uid": "title",
@@ -14,7 +18,9 @@
         "display_name": "Title",
         "mandatory": true,
         "unique": false,
-        "field_metadata": { "_default": true },
+        "field_metadata": {
+          "_default": true
+        },
         "multiple": false
       },
       {
@@ -40,7 +46,10 @@
   "baseline": {
     "title": "SDK TC Boolean Field Entry",
     "is_featured": true,
-    "feature_flags": [true, false]
+    "feature_flags": [
+      true,
+      false
+    ]
   },
   "testCases": [
     {
@@ -54,9 +63,15 @@
         "data": true
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -70,9 +85,15 @@
         "data": false
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -86,9 +107,15 @@
         "data": null
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -106,11 +133,24 @@
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "is_featured", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "is_featured",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -128,11 +168,24 @@
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "is_featured", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "is_featured",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -143,18 +196,33 @@
         "type": "field-setdata",
         "targetFieldUid": "is_featured",
         "subscribeFieldOnErrorUid": "is_featured",
-        "data": { "value": true }
+        "data": {
+          "value": true
+        }
       },
       "expected": {
         "setData": {
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "is_featured", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "is_featured",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -165,12 +233,22 @@
         "type": "field-setdata",
         "targetFieldUid": "feature_flags",
         "subscribeFieldOnErrorUid": "feature_flags",
-        "data": [true, false, true]
+        "data": [
+          true,
+          false,
+          true
+        ]
       },
       "expected": {
-        "setData": { "outcome": "resolved" },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     },
     {
@@ -188,12 +266,26 @@
           "outcome": "threw-ValidationError",
           "error": {
             "code": "VALIDATION_ERROR",
-            "details": [{ "fieldUid": "feature_flags", "reasons": [{ "reason": "INVALID_TYPE" }] }]
+            "details": [
+              {
+                "fieldUid": "feature_flags",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
           }
         },
-        "fieldOnError": { "fired": false },
-        "entryOnError": { "fired": false }
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
       }
     }
-  ]
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
 }

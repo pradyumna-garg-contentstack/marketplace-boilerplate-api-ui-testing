@@ -390,5 +390,6 @@
         }
       }
     }
-  ]
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
 }
