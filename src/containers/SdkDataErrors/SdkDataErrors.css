@@ -1,0 +1,327 @@
+.sdk-de-root {
+  padding: 12px;
+  font-family: sans-serif;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 680px;
+}
+
+.sdk-de-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sdk-de-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sdk-de-location {
+  font-size: 11px;
+  color: #888;
+}
+
+.sdk-de-controls {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 6px 8px;
+  align-items: center;
+}
+
+.sdk-de-label {
+  font-weight: 500;
+  color: #555;
+}
+
+.sdk-de-select {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 12px;
+  background: #fff;
+}
+
+.sdk-de-description {
+  font-size: 11px;
+  color: #666;
+  background: #f7f8fa;
+  border-left: 3px solid #aaa;
+  padding: 6px 10px;
+  border-radius: 2px;
+}
+
+/* ---- Cards ---- */
+
+.sdk-de-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fafafa;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sdk-de-card--results {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.sdk-de-card-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #888;
+  text-transform: uppercase;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.sdk-de-elapsed {
+  font-weight: 400;
+  font-size: 10px;
+  color: #aaa;
+}
+
+.sdk-de-overall {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.sdk-de-overall--pass {
+  color: #16a34a;
+  background: #dcfce7;
+}
+
+.sdk-de-overall--fail {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+/* ---- Key-value rows (Operation & Expected cards) ---- */
+
+.sdk-de-kv {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 18px;
+}
+
+.sdk-de-kv--indent {
+  padding-left: 16px;
+}
+
+.sdk-de-kv-key {
+  width: 68px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 500;
+  color: #777;
+}
+
+.sdk-de-kv-val {
+  font-family: 'Menlo', 'Monaco', monospace;
+  font-size: 11px;
+  color: #333;
+  word-break: break-all;
+}
+
+.sdk-de-kv-val--uid {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.sdk-de-kv-val--outcome {
+  color: #0369a1;
+}
+
+.sdk-de-kv-val--data {
+  color: #7c3aed;
+}
+
+.sdk-de-kv-val--true {
+  color: #b45309;
+}
+
+.sdk-de-kv-val--false {
+  color: #6b7280;
+}
+
+/* ---- Expected card signal sections ---- */
+
+.sdk-de-exp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 0;
+  border-top: 1px solid #ebebeb;
+}
+
+.sdk-de-exp-section:first-of-type {
+  border-top: none;
+}
+
+.sdk-de-exp-signal {
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 2px;
+}
+
+/* ---- Results card signal sections ---- */
+
+.sdk-de-result-section {
+  padding: 5px 0;
+  border-top: 1px solid #ebebeb;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sdk-de-result-section:first-of-type {
+  border-top: none;
+}
+
+.sdk-de-result-signal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 2px;
+}
+
+.sdk-de-result-signal-badge {
+  font-size: 11px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sdk-de-result-signal-badge--pass {
+  color: #16a34a;
+  background: #dcfce7;
+}
+
+.sdk-de-result-signal-badge--fail {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+/* ---- Check rows (within Results signal sections) ---- */
+
+.sdk-de-check-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 1px 0 1px 12px;
+  border-radius: 3px;
+}
+
+.sdk-de-check-row--fail {
+  background: #fff8f8;
+}
+
+.sdk-de-check-label {
+  width: 160px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.sdk-de-check-actual {
+  flex: 1;
+  font-family: 'Menlo', 'Monaco', monospace;
+  font-size: 11px;
+  color: #374151;
+  word-break: break-all;
+}
+
+.sdk-de-check-mismatch {
+  flex: 1;
+  font-size: 11px;
+  color: #dc2626;
+}
+
+.sdk-de-check-mismatch em {
+  font-style: normal;
+  font-family: 'Menlo', 'Monaco', monospace;
+  background: #fee2e2;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+
+.sdk-de-check-icon {
+  font-size: 11px;
+  font-weight: 700;
+  width: 16px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.sdk-de-check-icon--pass { color: #16a34a; }
+.sdk-de-check-icon--fail { color: #dc2626; }
+
+/* ---- Action buttons ---- */
+
+.sdk-de-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sdk-de-run-btn {
+  padding: 7px 18px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sdk-de-run-btn:disabled {
+  background: #a5a5a5;
+  cursor: not-allowed;
+}
+
+.sdk-de-reset-btn {
+  padding: 7px 14px;
+  background: #fff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sdk-de-reset-error {
+  font-size: 11px;
+  color: #dc2626;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+.sdk-de-reset-btn:disabled {
+  color: #aaa;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}

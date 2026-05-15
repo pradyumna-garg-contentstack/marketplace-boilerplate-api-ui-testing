@@ -1,0 +1,291 @@
+{
+  "id": "boolean_field",
+  "name": "Boolean Field — Single and Multiple",
+  "description": "Tests setData on boolean fields. Only true/false/null pass Zod. Strings like 'true', number 1, objects all fail INVALID_TYPE.",
+  "contentType": {
+    "uid": "sdk_tc_boolean",
+    "title": "SDK TC - Boolean Field",
+    "description": "Module for SDK boolean field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "is_featured",
+        "data_type": "boolean",
+        "display_name": "Is Featured",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "feature_flags",
+        "data_type": "boolean",
+        "display_name": "Feature Flags",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": true
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Boolean Field Entry",
+    "is_featured": true,
+    "feature_flags": [
+      true,
+      false
+    ]
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "is_featured true → resolves, no onError",
+      "description": "Boolean true passes Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "is_featured",
+        "subscribeFieldOnErrorUid": "is_featured",
+        "data": true
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "is_featured false → resolves, no onError",
+      "description": "Boolean false passes Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "is_featured",
+        "subscribeFieldOnErrorUid": "is_featured",
+        "data": false
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "is_featured null → resolves, no onError",
+      "description": "null clears the boolean field. Zod nullable allows it.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "is_featured",
+        "subscribeFieldOnErrorUid": "is_featured",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "is_featured string 'true' → throws ValidationError (INVALID_TYPE)",
+      "description": "String 'true' fails Zod boolean schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "is_featured",
+        "subscribeFieldOnErrorUid": "is_featured",
+        "data": "true"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "is_featured",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "is_featured number 1 → throws ValidationError (INVALID_TYPE)",
+      "description": "Number 1 fails Zod boolean schema (no coercion).",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "is_featured",
+        "subscribeFieldOnErrorUid": "is_featured",
+        "data": 1
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "is_featured",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "is_featured object → throws ValidationError (INVALID_TYPE)",
+      "description": "Object fails Zod boolean schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "is_featured",
+        "subscribeFieldOnErrorUid": "is_featured",
+        "data": {
+          "value": true
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "is_featured",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "feature_flags valid array → resolves, no onError",
+      "description": "Valid boolean array.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "feature_flags",
+        "subscribeFieldOnErrorUid": "feature_flags",
+        "data": [
+          true,
+          false,
+          true
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "feature_flags single boolean not array → throws ValidationError (INVALID_TYPE)",
+      "description": "Single boolean where array expected fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "feature_flags",
+        "subscribeFieldOnErrorUid": "feature_flags",
+        "data": true
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "feature_flags",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
+}

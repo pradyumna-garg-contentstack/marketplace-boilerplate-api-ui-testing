@@ -1,0 +1,383 @@
+{
+  "id": "global_field_complex",
+  "name": "Global Field — Complex (SEO + Social Links)",
+  "description": "Tests setData on global fields: single 'seo' (text with max_size, file) and repeatable 'social_links' (text fields). Validates dotted path errors and type mismatches.",
+  "contentType": {
+    "uid": "sdk_tc_global_complex",
+    "title": "SDK TC - Global Field Complex",
+    "description": "Module for SDK complex global field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "seo",
+        "data_type": "global_field",
+        "display_name": "SEO",
+        "mandatory": false,
+        "unique": false,
+        "multiple": false,
+        "reference_to": "sdk_tc_seo_gf",
+        "schema": [
+          {
+            "uid": "meta_title",
+            "data_type": "text",
+            "display_name": "Meta Title",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false,
+            "max": 60
+          },
+          {
+            "uid": "meta_description",
+            "data_type": "text",
+            "display_name": "Meta Description",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false,
+            "max": 160
+          },
+          {
+            "uid": "og_image",
+            "data_type": "file",
+            "display_name": "OG Image",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      },
+      {
+        "uid": "social_links",
+        "data_type": "global_field",
+        "display_name": "Social Links",
+        "mandatory": false,
+        "unique": false,
+        "multiple": true,
+        "reference_to": "sdk_tc_social_gf",
+        "schema": [
+          {
+            "uid": "platform",
+            "data_type": "text",
+            "display_name": "Platform",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          },
+          {
+            "uid": "url",
+            "data_type": "text",
+            "display_name": "URL",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Global Field Complex Entry",
+    "seo": {
+      "meta_title": "Best CMS",
+      "meta_description": "We are great.",
+      "og_image": "bltaaa111"
+    },
+    "social_links": [
+      {
+        "platform": "twitter",
+        "url": "https://twitter.com/x"
+      }
+    ]
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "seo valid → resolves, no onError",
+      "description": "Valid SEO global field. All types correct, no constraints violated.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "seo",
+        "subscribeFieldOnErrorUid": "seo",
+        "data": {
+          "meta_title": "Best CMS",
+          "meta_description": "We are great.",
+          "og_image": "bltaaa111"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "social_links object not array → throws ValidationError (INVALID_TYPE social_links)",
+      "description": "Plain object where repeatable global field array expected fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "social_links",
+        "subscribeFieldOnErrorUid": "social_links",
+        "data": {
+          "platform": "twitter",
+          "url": "https://..."
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "social_links",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "seo null → resolves, no onError",
+      "description": "null clears the global field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "seo",
+        "subscribeFieldOnErrorUid": "seo",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "seo meta_title is number → throws ValidationError (INVALID_TYPE seo.meta_title)",
+      "description": "Number for text meta_title fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "seo",
+        "subscribeFieldOnErrorUid": "seo",
+        "data": {
+          "meta_title": 123
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "seo.meta_title",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "seo og_image is full asset object → throws ValidationError (INVALID_TYPE seo.og_image)",
+      "description": "Full asset object for file field fails Zod — expects uid string.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "seo",
+        "subscribeFieldOnErrorUid": "seo",
+        "data": {
+          "og_image": {
+            "uid": "bltaaa111",
+            "url": "https://images.cs.io/v3/assets/blt..."
+          }
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "seo.og_image",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "seo array not object → throws ValidationError (INVALID_TYPE seo)",
+      "description": "Array fails Zod looseObject schema for global field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "seo",
+        "subscribeFieldOnErrorUid": "seo",
+        "data": [
+          {
+            "meta_title": "ok"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "seo",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "social_links valid array → resolves, no onError",
+      "description": "Valid array of social link global field items.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "social_links",
+        "subscribeFieldOnErrorUid": "social_links",
+        "data": [
+          {
+            "platform": "twitter",
+            "url": "https://twitter.com/x"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "social_links platform is number → throws ValidationError (INVALID_TYPE social_links.0.platform)",
+      "description": "Number for text platform in row 0 fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "social_links",
+        "subscribeFieldOnErrorUid": "social_links",
+        "data": [
+          {
+            "platform": 42,
+            "url": "https://..."
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "social_links.0.platform",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
+}

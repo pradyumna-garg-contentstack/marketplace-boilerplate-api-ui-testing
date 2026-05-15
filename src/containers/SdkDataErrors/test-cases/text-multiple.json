@@ -1,0 +1,314 @@
+{
+  "id": "text_multiple",
+  "name": "Text Field — Multiple (Array)",
+  "description": "Tests setData on a text field with multiple:true and min_size:3. Array type mismatch throws INVALID_TYPE (Zod). Item length violation resolves but fires onError.",
+  "contentType": {
+    "uid": "sdk_tc_text_multiple",
+    "title": "SDK TC - Text Multiple",
+    "description": "Module for SDK text multiple field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "tags_field",
+        "data_type": "text",
+        "display_name": "Tags",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "description": "Each tag min 3 chars"
+        },
+        "multiple": true,
+        "min": 3
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Text Multiple Entry",
+    "tags_field": [
+      "react",
+      "node"
+    ]
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "tags valid array → resolves, no onError",
+      "description": "Valid string array, all items ≥3 chars. Passes Zod and CMS constraint.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": [
+          "react",
+          "node"
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "tags empty array → resolves, no onError",
+      "description": "Empty array passes Zod and CMS (no items to violate min_size).",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": []
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "tags null → resolves, no onError",
+      "description": "null clears the field. Zod nullable wraps the array schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "tags string not array → throws ValidationError (INVALID_TYPE)",
+      "description": "String where array is expected. Fails Zod. setData throws.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": "react"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "tags_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "tags number → throws ValidationError (INVALID_TYPE)",
+      "description": "Number fails Zod array schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": 42
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "tags_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "tags array containing number → throws ValidationError (INVALID_TYPE)",
+      "description": "Array item 42 is not a string. Fails Zod item schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": [
+          "react",
+          42
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "tags_field.1",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "tags array containing null → resolves, no onError",
+      "description": "null item in array passes Zod (nullable text items) and CMS imposes no constraint on null.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "tags_field",
+        "subscribeFieldOnErrorUid": "tags_field",
+        "data": [
+          "react",
+          null
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-E-001",
+      "name": "entry.setData valid tags → resolves, no entryOnError",
+      "description": "entry.setData with valid tags array. Passes all layers.",
+      "operation": {
+        "type": "entry-setdata",
+        "data": {
+          "tags_field": [
+            "react",
+            "node"
+          ]
+        },
+        "subscribeFieldOnErrorUid": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-E-003",
+      "name": "entry.setData tags wrong type → throws ValidationError",
+      "description": "entry.setData with number for tags. Fails Zod. Throws.",
+      "operation": {
+        "type": "entry-setdata",
+        "data": {
+          "tags_field": 42
+        },
+        "subscribeFieldOnErrorUid": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "tags_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
+}

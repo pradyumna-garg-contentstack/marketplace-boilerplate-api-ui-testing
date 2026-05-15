@@ -1,0 +1,1016 @@
+{
+  "id": "all_fields_complex_custom_field",
+  "name": "All Field Types — Complex (Custom Field)",
+  "description": "Clone of all-fields complex for Set Data tests opened in a Custom Field (JSON extension). entry.setData cases omitted — use entry-sidebar module for those.",
+  "contentType": {
+    "uid": "sdk_tc_all_fields_cf",
+    "title": "SDK TC CF - All Fields Complex",
+    "description": "Content type containing all supported field types for comprehensive setData validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "extension_field",
+        "data_type": "json",
+        "display_name": "Extension Field",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "extension": true,
+          "allow_json_rte": false
+        },
+        "multiple": false
+      },
+      {
+        "uid": "text_single",
+        "data_type": "text",
+        "display_name": "Text Single",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false,
+        "min": 3,
+        "max": 100
+      },
+      {
+        "uid": "text_multiple",
+        "data_type": "text",
+        "display_name": "Text Multiple",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": true
+      },
+      {
+        "uid": "number_single",
+        "data_type": "number",
+        "display_name": "Number Single",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "number_multiple",
+        "data_type": "number",
+        "display_name": "Number Multiple",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": true
+      },
+      {
+        "uid": "boolean_field",
+        "data_type": "boolean",
+        "display_name": "Boolean Field",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "date_single",
+        "data_type": "isodate",
+        "display_name": "Date Single",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "date_with_range",
+        "data_type": "isodate",
+        "display_name": "Date With Range",
+        "mandatory": false,
+        "unique": false,
+        "startDate": "2025-01-01",
+        "endDate": "2026-12-31",
+        "field_metadata": {
+          "description": "",
+          "default_value": {},
+          "date_range": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "file_single",
+        "data_type": "file",
+        "display_name": "File Single",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "file_multiple",
+        "data_type": "file",
+        "display_name": "File Multiple",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": true
+      },
+      {
+        "uid": "link_field",
+        "data_type": "link",
+        "display_name": "Link Field",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "reference_single",
+        "data_type": "reference",
+        "display_name": "Reference Single",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "ref_multiple": false
+        },
+        "reference_to": [
+          "sdk_tc_all_fields_cf"
+        ],
+        "multiple": false
+      },
+      {
+        "uid": "select_single",
+        "data_type": "text",
+        "display_name": "Select Single",
+        "display_type": "dropdown",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        },
+        "enum": {
+          "advanced": false,
+          "choices": [
+            {
+              "value": "opt_a"
+            },
+            {
+              "value": "opt_b"
+            },
+            {
+              "value": "opt_c"
+            }
+          ]
+        },
+        "multiple": false
+      },
+      {
+        "uid": "select_multiple",
+        "data_type": "text",
+        "display_name": "Select Multiple",
+        "display_type": "checkbox",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "description": "",
+          "default_value": ""
+        },
+        "enum": {
+          "advanced": false,
+          "choices": [
+            {
+              "value": "tag_1"
+            },
+            {
+              "value": "tag_2"
+            },
+            {
+              "value": "tag_3"
+            }
+          ]
+        },
+        "multiple": true
+      },
+      {
+        "uid": "group_single",
+        "data_type": "group",
+        "display_name": "Group Single",
+        "mandatory": false,
+        "unique": false,
+        "multiple": false,
+        "schema": [
+          {
+            "uid": "sub_text",
+            "data_type": "text",
+            "display_name": "Sub Text",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false,
+            "min": 2
+          },
+          {
+            "uid": "sub_number",
+            "data_type": "number",
+            "display_name": "Sub Number",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      },
+      {
+        "uid": "group_repeatable",
+        "data_type": "group",
+        "display_name": "Group Repeatable",
+        "mandatory": false,
+        "unique": false,
+        "multiple": true,
+        "schema": [
+          {
+            "uid": "item_name",
+            "data_type": "text",
+            "display_name": "Item Name",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      },
+      {
+        "uid": "modular_blocks_field",
+        "data_type": "blocks",
+        "display_name": "Modular Blocks Field",
+        "mandatory": false,
+        "unique": false,
+        "multiple": true,
+        "blocks": [
+          {
+            "uid": "text_section",
+            "title": "Text Section",
+            "schema": [
+              {
+                "uid": "content",
+                "data_type": "text",
+                "display_name": "Content",
+                "mandatory": false,
+                "unique": false,
+                "field_metadata": {},
+                "multiple": false,
+                "min": 5
+              }
+            ]
+          },
+          {
+            "uid": "image_section",
+            "title": "Image Section",
+            "schema": [
+              {
+                "uid": "asset",
+                "data_type": "file",
+                "display_name": "Asset",
+                "mandatory": false,
+                "unique": false,
+                "field_metadata": {},
+                "multiple": false
+              },
+              {
+                "uid": "caption",
+                "data_type": "text",
+                "display_name": "Caption",
+                "mandatory": false,
+                "unique": false,
+                "field_metadata": {},
+                "multiple": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "uid": "taxonomies",
+        "data_type": "taxonomy",
+        "display_name": "Taxonomies",
+        "mandatory": false,
+        "unique": false,
+        "multiple": true,
+        "taxonomies": [
+          {
+            "taxonomy_uid": "taxonomy_testing1",
+            "max_terms": 5,
+            "mandatory": false,
+            "non_localizable": false
+          }
+        ]
+      },
+      {
+        "uid": "json_plain",
+        "data_type": "text",
+        "display_name": "JSON Plain",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "json_rte",
+        "data_type": "json",
+        "display_name": "JSON RTE",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "allow_json_rte": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "markdown_field",
+        "data_type": "text",
+        "display_name": "Markdown Field",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {
+          "markdown": true
+        },
+        "multiple": false
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC All Fields Complex Entry",
+    "text_single": "Hello World",
+    "text_multiple": [
+      "react",
+      "node"
+    ],
+    "number_single": 42,
+    "number_multiple": [
+      1,
+      2,
+      3
+    ],
+    "boolean_field": true,
+    "date_single": "2025-06-15T00:00:00.000Z",
+    "date_with_range": "2025-06-15T00:00:00.000Z",
+    "file_single": "bltaaa111",
+    "file_multiple": [
+      "bltbbb222",
+      "bltccc333"
+    ],
+    "link_field": {
+      "href": "/home",
+      "title": "Home"
+    },
+    "reference_single": null,
+    "select_single": "opt_a",
+    "select_multiple": [
+      "tag_1",
+      "tag_2"
+    ],
+    "group_single": {
+      "sub_text": "hello",
+      "sub_number": 10
+    },
+    "group_repeatable": [
+      {
+        "item_name": "Item One"
+      }
+    ],
+    "modular_blocks_field": [
+      {
+        "text_section": {
+          "content": "Hello world content"
+        }
+      }
+    ],
+    "taxonomies": [],
+    "json_plain": "{\"key\":\"value\"}",
+    "json_rte": {
+      "type": "doc",
+      "children": [
+        {
+          "type": "p",
+          "children": [
+            {
+              "text": "Base"
+            }
+          ]
+        }
+      ]
+    },
+    "markdown_field": "# Hello",
+    "extension_field": {
+      "color": "#0070f3"
+    }
+  },
+  "testCases": [
+    {
+      "id": "TC-B-001",
+      "name": "Group B: text_single type mismatch (number) → throws INVALID_TYPE",
+      "description": "Number for text field fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "text_single",
+        "subscribeFieldOnErrorUid": "text_single",
+        "data": 123
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "text_single",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-002",
+      "name": "Group B: number_single type mismatch (string) → throws INVALID_TYPE",
+      "description": "String for number field fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "number_single",
+        "subscribeFieldOnErrorUid": "number_single",
+        "data": "twenty"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "number_single",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-003",
+      "name": "Group B: boolean_field type mismatch (string) → throws INVALID_TYPE",
+      "description": "String 'true' for boolean fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "boolean_field",
+        "subscribeFieldOnErrorUid": "boolean_field",
+        "data": "true"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "boolean_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-004",
+      "name": "Group B: date_single type mismatch (object) → throws INVALID_TYPE",
+      "description": "Object for date fails Zod string schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "date_single",
+        "subscribeFieldOnErrorUid": "date_single",
+        "data": {
+          "year": 2025
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "date_single",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-005",
+      "name": "Group B: file_single type mismatch (full object) → throws ValidationError",
+      "description": "Full asset object {uid, url} fails Zod — expects uid string only.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "file_single",
+        "subscribeFieldOnErrorUid": "file_single",
+        "data": {
+          "uid": "bltaaa111",
+          "url": "https://images.cs.io/v3/assets/blt..."
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "file_single",
+                "reasons": [
+                  {
+                    "message": "Expected a valid file uid or an array of file uids"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-006",
+      "name": "Group B: link_field type mismatch (string) → throws INVALID_TYPE",
+      "description": "Plain URL string fails Zod object schema for link.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "link_field",
+        "subscribeFieldOnErrorUid": "link_field",
+        "data": "/url"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "link_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-007",
+      "name": "Group B: reference_single type mismatch (string) → throws INVALID_TYPE",
+      "description": "Plain uid string fails Zod reference union schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "reference_single",
+        "subscribeFieldOnErrorUid": "reference_single",
+        "data": "bltabc123"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "reference_single",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-008",
+      "name": "Group B: group_single type mismatch (array) → throws INVALID_TYPE",
+      "description": "Array fails Zod looseObject schema for single group.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "group_single",
+        "subscribeFieldOnErrorUid": "group_single",
+        "data": [
+          {
+            "sub_text": "hello"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "group_single",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-009",
+      "name": "Group B: modular_blocks_field type mismatch (object) → throws INVALID_TYPE",
+      "description": "Plain object fails Zod array schema for modular blocks.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "modular_blocks_field",
+        "subscribeFieldOnErrorUid": "modular_blocks_field",
+        "data": {
+          "text_section": {
+            "content": "Hello"
+          }
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "modular_blocks_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-010",
+      "name": "Group B: json_plain accepts string (text field) → resolves",
+      "description": "json_plain is modeled as text in this module due to CMA restrictions; string resolves.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "json_plain",
+        "subscribeFieldOnErrorUid": "json_plain",
+        "data": "string"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-011",
+      "name": "Group B: json_rte type mismatch (null) → throws INVALID_TYPE",
+      "description": "null throws for JSON RTE — it is NOT nullable unlike all other fields.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "json_rte",
+        "subscribeFieldOnErrorUid": "json_rte",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "json_rte",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-012",
+      "name": "Group B: taxonomies type mismatch (string) → throws INVALID_TYPE",
+      "description": "String fails Zod array schema for taxonomy.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "taxonomies",
+        "subscribeFieldOnErrorUid": "taxonomies",
+        "data": "electronics"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "taxonomies",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-B-013",
+      "name": "Group B: extension_field type mismatch (number) → throws INVALID_TYPE",
+      "description": "Number primitive fails Zod union(array, record) for extension JSON field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "extension_field",
+        "subscribeFieldOnErrorUid": "extension_field",
+        "data": 42
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "extension_field",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-C-001",
+      "name": "Group C: text_single too short → resolves, onError fires",
+      "description": "'ab' (2 chars) passes Zod but violates min_size:3.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "text_single",
+        "subscribeFieldOnErrorUid": "text_single",
+        "data": "ab"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": true,
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "text_single"
+              }
+            ]
+          }
+        },
+        "entryOnError": {
+          "fired": true,
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "text_single"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "TC-D-001",
+      "name": "Group D: null clearing — text_single → resolves",
+      "description": "null is valid for all fields except json_rte.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "text_single",
+        "subscribeFieldOnErrorUid": "text_single",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-D-002",
+      "name": "Group D: null clearing — file_single → resolves",
+      "description": "null clears file field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "file_single",
+        "subscribeFieldOnErrorUid": "file_single",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-D-003",
+      "name": "Group D: null clearing — link_field → resolves",
+      "description": "null clears link field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "link_field",
+        "subscribeFieldOnErrorUid": "link_field",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-D-004",
+      "name": "Group D: null clearing — json_rte → throws INVALID_TYPE (NOT nullable)",
+      "description": "json_rte is the only NOT nullable field — null throws.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "json_rte",
+        "subscribeFieldOnErrorUid": "json_rte",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "json_rte",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "custom-field",
+  "sdkDeCustomFieldUid": "extension_field"
+}

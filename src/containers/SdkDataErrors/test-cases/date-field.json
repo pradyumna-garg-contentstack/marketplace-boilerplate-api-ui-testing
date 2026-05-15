@@ -1,0 +1,296 @@
+{
+  "id": "date_field",
+  "name": "Date Field — Single with Range Constraint",
+  "description": "Tests setData on isodate fields. Zod schema is z.string().nullable() — any string passes Zod. Date range constraints (startDate/endDate) fire onError after setData resolves. Non-string types throw INVALID_TYPE.",
+  "contentType": {
+    "uid": "sdk_tc_date",
+    "title": "SDK TC - Date Field",
+    "description": "Module for SDK date field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "published_at",
+        "data_type": "isodate",
+        "display_name": "Published At",
+        "mandatory": false,
+        "unique": false,
+        "field_metadata": {},
+        "multiple": false
+      },
+      {
+        "uid": "event_date",
+        "data_type": "isodate",
+        "display_name": "Event Date",
+        "mandatory": false,
+        "unique": false,
+        "startDate": "2025-01-01",
+        "endDate": "2026-12-31",
+        "field_metadata": {
+          "description": "",
+          "default_value": {},
+          "date_range": true
+        },
+        "multiple": false
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Date Field Entry",
+    "published_at": "2025-04-15T09:00:00.000Z",
+    "event_date": "2025-06-15T00:00:00.000Z"
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "published_at valid ISO date → resolves, no onError",
+      "description": "Valid ISO date string. Passes Zod (string) and no constraint violations.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "published_at",
+        "subscribeFieldOnErrorUid": "published_at",
+        "data": "2025-04-15T09:00:00.000Z"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "published_at null → resolves, no onError",
+      "description": "null clears the date field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "published_at",
+        "subscribeFieldOnErrorUid": "published_at",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-003",
+      "name": "published_at non-date string → resolves, no onError",
+      "description": "Any string passes Zod z.string(). No date format validation at Zod layer.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "published_at",
+        "subscribeFieldOnErrorUid": "published_at",
+        "data": "not-a-date"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "published_at number timestamp → throws ValidationError (INVALID_TYPE)",
+      "description": "Unix timestamp as number fails Zod string schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "published_at",
+        "subscribeFieldOnErrorUid": "published_at",
+        "data": 1713168000000
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "published_at",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "published_at date object → throws ValidationError (INVALID_TYPE)",
+      "description": "Object fails Zod string schema.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "published_at",
+        "subscribeFieldOnErrorUid": "published_at",
+        "data": {
+          "year": 2025
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "published_at",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "event_date within range → resolves, no onError",
+      "description": "Date within 2025-01-01 to 2026-12-31 range. No constraint violation.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "event_date",
+        "subscribeFieldOnErrorUid": "event_date",
+        "data": "2025-06-15T00:00:00.000Z"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "event_date before startDate → resolves (Zod: string), both onError fire",
+      "description": "Date before 2025-01-01 passes Zod but violates startDate constraint. CMS form fires onError.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "event_date",
+        "subscribeFieldOnErrorUid": "event_date",
+        "data": "2024-01-01T00:00:00.000Z"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": true,
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "event_date"
+              }
+            ]
+          }
+        },
+        "entryOnError": {
+          "fired": true,
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "event_date"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "event_date after endDate → resolves (Zod: string), both onError fire",
+      "description": "Date after 2026-12-31 passes Zod but violates endDate constraint.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "event_date",
+        "subscribeFieldOnErrorUid": "event_date",
+        "data": "2027-01-01T00:00:00.000Z"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": true,
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "event_date"
+              }
+            ]
+          }
+        },
+        "entryOnError": {
+          "fired": true,
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "event_date"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
+}

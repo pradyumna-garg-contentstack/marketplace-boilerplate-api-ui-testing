@@ -1,0 +1,286 @@
+{
+  "id": "text_in_global_field",
+  "name": "Text Field Inside Global Field (Single)",
+  "description": "Tests setData on a global field containing text subfields. Also tests direct setData on child via dotted path.",
+  "contentType": {
+    "uid": "sdk_tc_text_global",
+    "title": "SDK TC - Text In Global Field",
+    "description": "Module for SDK text-in-global-field validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "author",
+        "data_type": "global_field",
+        "display_name": "Author",
+        "mandatory": false,
+        "unique": false,
+        "multiple": false,
+        "reference_to": "sdk_tc_author_gf",
+        "schema": [
+          {
+            "uid": "name",
+            "data_type": "text",
+            "display_name": "Name",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false,
+            "min": 2
+          },
+          {
+            "uid": "bio",
+            "data_type": "text",
+            "display_name": "Bio",
+            "mandatory": false,
+            "unique": false,
+            "field_metadata": {},
+            "multiple": false
+          }
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Text In Global Field Entry",
+    "author": {
+      "name": "Jane Doe",
+      "bio": "Writer"
+    }
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "author valid → resolves, no onError",
+      "description": "Valid author with name ≥2 chars. Passes all layers.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author",
+        "subscribeFieldOnErrorUid": "author",
+        "data": {
+          "name": "Jane Doe",
+          "bio": "Writer"
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "author null → resolves, no onError",
+      "description": "null clears the global field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author",
+        "subscribeFieldOnErrorUid": "author",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "author name is number → throws ValidationError (INVALID_TYPE author.name)",
+      "description": "Number for text name child field. Fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author",
+        "subscribeFieldOnErrorUid": "author",
+        "data": {
+          "name": 123
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "author.name",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "author bio is number → throws ValidationError (INVALID_TYPE author.bio)",
+      "description": "Number for text bio child field. Fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author",
+        "subscribeFieldOnErrorUid": "author",
+        "data": {
+          "name": "Jane",
+          "bio": 42
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "author.bio",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "author array not object → throws ValidationError (INVALID_TYPE author)",
+      "description": "Array fails Zod looseObject schema for global field.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author",
+        "subscribeFieldOnErrorUid": "author",
+        "data": [
+          {
+            "name": "Jane"
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "author",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-007",
+      "name": "direct author.name setData valid → resolves, no onError",
+      "description": "Direct setData on child field with valid string.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author.name",
+        "subscribeFieldOnErrorUid": "author.name",
+        "data": "Jane Doe"
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-008",
+      "name": "direct author.name setData type mismatch → throws ValidationError",
+      "description": "Direct setData on child field with number. Fails Zod.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "author.name",
+        "subscribeFieldOnErrorUid": "author.name",
+        "data": 42
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "name",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
+}

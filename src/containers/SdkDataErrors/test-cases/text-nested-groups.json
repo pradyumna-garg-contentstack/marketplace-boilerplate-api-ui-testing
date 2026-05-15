@@ -1,0 +1,240 @@
+{
+  "id": "text_nested_groups",
+  "name": "Text Field in Two-Level Nested Groups",
+  "description": "Tests setData on a 2-level nested group: outer group 'location' → inner group 'coordinates' → text 'label' (min_size:3). Validates dotted path errors like location.coordinates.label.",
+  "contentType": {
+    "uid": "sdk_tc_text_nested",
+    "title": "SDK TC - Text Nested Groups",
+    "description": "Module for SDK two-level nested group validation tests",
+    "options": {
+      "is_page": false,
+      "singleton": false,
+      "title": "title"
+    },
+    "schema": [
+      {
+        "uid": "title",
+        "data_type": "text",
+        "display_name": "Title",
+        "mandatory": true,
+        "unique": false,
+        "field_metadata": {
+          "_default": true
+        },
+        "multiple": false
+      },
+      {
+        "uid": "location",
+        "data_type": "group",
+        "display_name": "Location",
+        "mandatory": false,
+        "unique": false,
+        "multiple": false,
+        "schema": [
+          {
+            "uid": "coordinates",
+            "data_type": "group",
+            "display_name": "Coordinates",
+            "mandatory": false,
+            "unique": false,
+            "multiple": false,
+            "schema": [
+              {
+                "uid": "label",
+                "data_type": "text",
+                "display_name": "Label",
+                "mandatory": false,
+                "unique": false,
+                "field_metadata": {
+                  "description": "Min 3 chars"
+                },
+                "multiple": false,
+                "min": 3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "baseline": {
+    "title": "SDK TC Text Nested Groups Entry",
+    "location": {
+      "coordinates": {
+        "label": "Center"
+      }
+    }
+  },
+  "testCases": [
+    {
+      "id": "TC-F-001",
+      "name": "location valid 2-level nested → resolves, no onError",
+      "description": "Valid label ≥3 chars. Passes all layers.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "location",
+        "subscribeFieldOnErrorUid": "location",
+        "data": {
+          "coordinates": {
+            "label": "Center"
+          }
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-002",
+      "name": "location null outer group → resolves, no onError",
+      "description": "null clears the outer group.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "location",
+        "subscribeFieldOnErrorUid": "location",
+        "data": null
+      },
+      "expected": {
+        "setData": {
+          "outcome": "resolved"
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-004",
+      "name": "location label is number → throws ValidationError (INVALID_TYPE location.coordinates.label)",
+      "description": "Number for deeply nested text field. Fails Zod. Full dotted path in error.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "location",
+        "subscribeFieldOnErrorUid": "location",
+        "data": {
+          "coordinates": {
+            "label": 99
+          }
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "location.coordinates.label",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-005",
+      "name": "location inner group is array → throws ValidationError (INVALID_TYPE location.coordinates)",
+      "description": "Array for inner group fails Zod looseObject.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "location",
+        "subscribeFieldOnErrorUid": "location",
+        "data": {
+          "coordinates": [
+            {
+              "label": "ok"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "location.coordinates",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    },
+    {
+      "id": "TC-F-006",
+      "name": "location outer group is array → throws ValidationError (INVALID_TYPE location)",
+      "description": "Array for outer group fails Zod looseObject.",
+      "operation": {
+        "type": "field-setdata",
+        "targetFieldUid": "location",
+        "subscribeFieldOnErrorUid": "location",
+        "data": [
+          {
+            "coordinates": {
+              "label": "ok"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "setData": {
+          "outcome": "threw-ValidationError",
+          "error": {
+            "code": "VALIDATION_ERROR",
+            "details": [
+              {
+                "fieldUid": "location",
+                "reasons": [
+                  {
+                    "reason": "INVALID_TYPE"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "fieldOnError": {
+          "fired": false
+        },
+        "entryOnError": {
+          "fired": false
+        }
+      }
+    }
+  ],
+  "sdkDeUiLocation": "entry-sidebar"
+}
